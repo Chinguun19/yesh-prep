@@ -10,22 +10,22 @@
 
 💬 Discussion forums and support community
 
-🌐 Built with modern technologies (e.g., React, Next.js, Firebase, etc.)
+🌐 Built with modern technologies (React, Next.js)
 
 🎯 Goal To make entrance exam preparation more accessible, structured, and engaging for aspiring Yesh University students through a user-friendly platform.
 
 📱 Platforms Web App
 
-Mobile App (iOS & Android with React Native / Flutter)
+Mobile App (iOS & Android with React Native )
 
-🛠 Tech Stack Frontend: React / Next.js
+🛠 Tech Stack Frontend: Next.js
 
-Backend: Node.js / Firebase / Express
+Backend: Next.js
 
-Database: Firestore / MongoDB
+Database: MongoDB
 
-Mobile: React Native or Flutter
+Mobile: React Native
 
-Authentication: Firebase Auth
+Authentication: Next Auth
 
-Hosting: Vercel / Firebase Hosting
+Hosting: Vercel 
