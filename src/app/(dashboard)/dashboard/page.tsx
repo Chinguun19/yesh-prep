@@ -7,7 +7,14 @@ import ProgressChart from '@/components/dashboard/ProgressChart'
 import RecommendedActions from '@/components/dashboard/RecommendedActions'
 
 export default function DashboardPage() {
-  const quickStats = [
+  interface QuickStat {
+    title: string
+    value: string
+    change: string
+    trend: 'up' | 'down'
+  }
+
+  const quickStats: QuickStat[] = [
     {
       title: 'Last Test Score',
       value: '85%',
