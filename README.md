@@ -24,6 +24,29 @@ Backend: Next.js
 
 Database: MongoDB
 
+## Prisma setup
+
+This project uses [Prisma](https://www.prisma.io/) as an ORM for MongoDB.
+
+1. Copy `.env.example` to `.env` and provide your MongoDB password:
+
+```bash
+cp .env.example .env
+# edit .env and replace <db_password>
+```
+
+2. Generate the Prisma client:
+
+```bash
+npm run generate
+```
+
+3. Start the development server:
+
+```bash
+npm run dev
+```
+
 Mobile: React Native
 
 Authentication: Next Auth

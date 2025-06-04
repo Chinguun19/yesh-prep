@@ -1,0 +1,28 @@
+ datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+ }
+
+ generator client {
+  provider = "prisma-client-js"
+ }
+
+ model Question {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  question      String
+  options       String[]
+  correctAnswer String
+  explanation   String?
+  subject       String
+ }
+
+ model StudyMaterial {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  subject     String
+  level       String
+  description String
+  duration    String
+  lessons     Int
+  image       String
+ }
