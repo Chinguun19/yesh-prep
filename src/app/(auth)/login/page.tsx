@@ -2,15 +2,21 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { signIn } from 'next-auth/react'
 import { FaEnvelope, FaLock } from 'react-icons/fa'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement Firebase/JWT auth
+    await signIn('credentials', {
+      redirect: true,
+      email,
+      password,
+      callbackUrl: '/dashboard',
+    })
   }
 
   return (
