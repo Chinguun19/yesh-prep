@@ -1,40 +1,43 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FaSearch, FaFilter } from 'react-icons/fa'
 import StudyMaterialCard from '@/components/study/StudyMaterialCard'
 
 const subjects = ['All', 'Mathematics', 'Physics', 'Chemistry', 'Biology']
 const levels = ['All', 'Beginner', 'Intermediate', 'Advanced']
 
-const materials = [
-  {
-    id: 1,
-    title: 'Calculus Fundamentals',
-    subject: 'Mathematics',
-    level: 'Beginner',
-    description: 'Learn the basics of calculus including limits, derivatives, and integrals.',
-    duration: '2 hours',
-    lessons: 12,
-    image: 'https://wallpaperaccess.com/full/2870989.jpg',
-  },
-  {
-    id: 2,
-    title: 'Quantum Mechanics',
-    subject: 'Physics',
-    level: 'Advanced',
-    description: 'Explore the principles of quantum mechanics and wave functions.',
-    duration: '3 hours',
-    lessons: 15,
-    image: 'https://wallpaperaccess.com/full/2870989.jpg',
-  },
-  // Add more study materials...
-]
+interface StudyMaterial {
+  id: number
+  title: string
+  subject: string
+  level: string
+  description: string
+  duration: string
+  lessons: number
+  image: string
+}
 
 export default function StudyMaterialsPage() {
+  const [materials, setMaterials] = useState<StudyMaterial[]>([])
   const [selectedSubject, setSelectedSubject] = useState('All')
   const [selectedLevel, setSelectedLevel] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
+
+  useEffect(() => {
+    const fetchMaterials = async () => {
+      const res = await fetch('/api/study-materials')
+      const data = await res.json()
+      setMaterials(data)
+    }
+    fetchMaterials()
+  }, [])
+
+  if (!materials.length) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">Loading...</div>
+    )
+  }
 
   const filteredMaterials = materials.filter((material) => {
     const matchesSubject = selectedSubject === 'All' || material.subject === selectedSubject

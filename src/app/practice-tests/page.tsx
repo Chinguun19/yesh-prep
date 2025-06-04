@@ -5,31 +5,36 @@ import { FaClock, FaChevronLeft, FaChevronRight, FaCheck } from 'react-icons/fa'
 import Timer from '@/components/practice/Timer'
 import QuestionCard from '@/components/practice/QuestionCard'
 
-const mockQuestions = [
-  {
-    id: 1,
-    question: 'What is the derivative of x² with respect to x?',
-    options: ['x', '2x', '2', 'x²'],
-    correctAnswer: '2x',
-    explanation: 'The power rule states that the derivative of x^n is nx^(n-1).',
-    subject: 'Mathematics',
-  },
-  {
-    id: 2,
-    question: 'Which of the following is a noble gas?',
-    options: ['Oxygen', 'Helium', 'Chlorine', 'Sodium'],
-    correctAnswer: 'Helium',
-    explanation: 'Helium is a noble gas in Group 18 of the periodic table.',
-    subject: 'Chemistry',
-  },
-  // Add more questions...
-]
+interface Question {
+  id: number
+  question: string
+  options: string[]
+  correctAnswer: string
+  explanation: string
+  subject: string
+}
 
 export default function PracticeTestPage() {
+  const [questions, setQuestions] = useState<Question[]>([])
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<{ [key: number]: string }>({})
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [timeLeft, setTimeLeft] = useState(3600) // 60 minutes
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      const res = await fetch('/api/practice-tests')
+      const data = await res.json()
+      setQuestions(data)
+    }
+    fetchQuestions()
+  }, [])
+
+  if (!questions.length) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">Loading...</div>
+    )
+  }
 
   const handleAnswer = (answer: string) => {
     setAnswers((prev) => ({
@@ -39,7 +44,7 @@ export default function PracticeTestPage() {
   }
 
   const handleNext = () => {
-    if (currentQuestion < mockQuestions.length - 1) {
+    if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
     }
   }
@@ -57,11 +62,11 @@ export default function PracticeTestPage() {
   const calculateScore = () => {
     let correct = 0
     Object.entries(answers).forEach(([questionIndex, answer]) => {
-      if (mockQuestions[Number(questionIndex)].correctAnswer === answer) {
+      if (questions[Number(questionIndex)].correctAnswer === answer) {
         correct++
       }
     })
-    return Math.round((correct / mockQuestions.length) * 100)
+    return Math.round((correct / questions.length) * 100)
   }
 
   return (
@@ -74,7 +79,7 @@ export default function PracticeTestPage() {
 
       {/* Question Card */}
       <QuestionCard
-        question={mockQuestions[currentQuestion]}
+        question={questions[currentQuestion]}
         selectedAnswer={answers[currentQuestion]}
         onAnswer={handleAnswer}
         isSubmitted={isSubmitted}
@@ -92,7 +97,7 @@ export default function PracticeTestPage() {
         </button>
 
         <div className="flex items-center space-x-2">
-          {mockQuestions.map((_, index) => (
+          {questions.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentQuestion(index)}
@@ -109,7 +114,7 @@ export default function PracticeTestPage() {
           ))}
         </div>
 
-        {currentQuestion === mockQuestions.length - 1 ? (
+        {currentQuestion === questions.length - 1 ? (
           <button
             onClick={handleSubmit}
             disabled={isSubmitted}
@@ -137,7 +142,7 @@ export default function PracticeTestPage() {
             {calculateScore()}%
           </div>
           <div className="space-y-4">
-            {mockQuestions.map((question, index) => (
+            {questions.map((question, index) => (
               <div key={question.id} className="p-4 rounded-lg bg-gray-50">
                 <div className="font-medium text-gray-900">Question {index + 1}</div>
                 <div className="mt-1 text-sm text-gray-600">
