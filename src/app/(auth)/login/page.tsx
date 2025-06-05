@@ -4,14 +4,26 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { FaEnvelope, FaLock } from 'react-icons/fa'
 import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const router = useRouter()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement Firebase/JWT auth
+    const res = await signIn('credentials', {
+      redirect: false,
+      email,
+      password,
+    })
+    if (res?.error) {
+      setError('Invalid email or password')
+    } else {
+      router.push('/dashboard')
+    }
   }
 
   return (
@@ -126,6 +138,9 @@ export default function LoginPage() {
             >
               Sign In
             </button>
+            {error && (
+              <p className="mt-2 text-sm text-red-600 text-center">{error}</p>
+            )}
             <button
               type="button"
               onClick={() => signIn('facebook')}

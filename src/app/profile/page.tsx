@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { FaUser, FaEnvelope, FaLock, FaHistory, FaSignOutAlt } from 'react-icons/fa'
+import { signOut } from 'next-auth/react'
 
 export default function ProfilePage() {
   const [name, setName] = useState('John Doe')
@@ -33,16 +34,16 @@ export default function ProfilePage() {
 
   const handleUpdateProfile = (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement profile update
+    console.log('Profile updated', { name, email })
   }
 
   const handleChangePassword = (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement password change
+    console.log('Password changed')
   }
 
   const handleLogout = () => {
-    // TODO: Implement logout
+    signOut({ callbackUrl: '/' })
   }
 
   return (
