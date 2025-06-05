@@ -11,6 +11,7 @@ interface StudyMaterial {
   duration: string
   lessons: number
   image: string
+  exam: string
 }
 
 interface StudyMaterialCardProps {
@@ -38,6 +39,9 @@ const StudyMaterialCard = ({ material }: StudyMaterialCardProps) => {
           </span>
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
             {material.level}
+          </span>
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+            {material.exam}
           </span>
         </div>
         <h3 className="text-lg font-medium text-gray-900 mb-2">{material.title}</h3>

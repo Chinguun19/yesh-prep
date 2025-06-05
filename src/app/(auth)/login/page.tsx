@@ -29,7 +29,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex">
       {/* Left Column - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-r from-indigo-600 to-blue-500 p-12 text-white flex-col justify-between">
+      <div className="hidden lg:flex lg:w-1/2 bg-gray-100 p-12 text-gray-900 flex-col justify-between">
         <div>
           <h1 className="text-4xl font-bold mb-6">Welcome Back!</h1>
           <p className="text-xl mb-8">
