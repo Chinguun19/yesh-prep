@@ -50,5 +50,7 @@ npm run dev
 Mobile: React Native
 
 Authentication: Next Auth
+  - Includes Facebook OAuth provider. Set `FACEBOOK_CLIENT_ID` and
+    `FACEBOOK_CLIENT_SECRET` in your `.env` file.
 
-Hosting: Vercel 
+Hosting: Vercel
