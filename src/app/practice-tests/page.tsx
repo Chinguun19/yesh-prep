@@ -12,6 +12,7 @@ interface Question {
   correctAnswer: string
   explanation: string
   subject: string
+  exam: string
 }
 
 export default function PracticeTestPage() {
@@ -20,6 +21,8 @@ export default function PracticeTestPage() {
   const [answers, setAnswers] = useState<{ [key: number]: string }>({})
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [timeLeft, setTimeLeft] = useState(3600) // 60 minutes
+  const [selectedSubject, setSelectedSubject] = useState('All')
+  const [selectedExam, setSelectedExam] = useState('All')
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -36,6 +39,29 @@ export default function PracticeTestPage() {
     )
   }
 
+  const subjects = Array.from(new Set(questions.map((q) => q.subject)))
+  const exams = Array.from(new Set(questions.map((q) => q.exam)))
+
+  const filteredQuestions = questions.filter(
+    (q) =>
+      (selectedSubject === 'All' || q.subject === selectedSubject) &&
+      (selectedExam === 'All' || q.exam === selectedExam)
+  )
+
+  if (!filteredQuestions.length) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        No questions found for your selection.
+      </div>
+    )
+  }
+
+  useEffect(() => {
+    setCurrentQuestion(0)
+    setAnswers({})
+    setIsSubmitted(false)
+  }, [selectedSubject, selectedExam])
+
   const handleAnswer = (answer: string) => {
     setAnswers((prev) => ({
       ...prev,
@@ -44,7 +70,7 @@ export default function PracticeTestPage() {
   }
 
   const handleNext = () => {
-    if (currentQuestion < questions.length - 1) {
+    if (currentQuestion < filteredQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
     }
   }
@@ -62,11 +88,11 @@ export default function PracticeTestPage() {
   const calculateScore = () => {
     let correct = 0
     Object.entries(answers).forEach(([questionIndex, answer]) => {
-      if (questions[Number(questionIndex)].correctAnswer === answer) {
+      if (filteredQuestions[Number(questionIndex)].correctAnswer === answer) {
         correct++
       }
     })
-    return Math.round((correct / questions.length) * 100)
+    return Math.round((correct / filteredQuestions.length) * 100)
   }
 
   return (
@@ -83,9 +109,37 @@ export default function PracticeTestPage() {
         )}
       </div>
 
+      {/* Filters */}
+      <div className="mb-6 flex gap-4">
+        <select
+          value={selectedSubject}
+          onChange={(e) => setSelectedSubject(e.target.value)}
+          className="border border-gray-300 rounded-md px-3 py-2 text-sm bg-white"
+        >
+          <option value="All">All Subjects</option>
+          {subjects.map((s) => (
+            <option key={s} value={s}>
+              {s}
+            </option>
+          ))}
+        </select>
+        <select
+          value={selectedExam}
+          onChange={(e) => setSelectedExam(e.target.value)}
+          className="border border-gray-300 rounded-md px-3 py-2 text-sm bg-white"
+        >
+          <option value="All">All Exams</option>
+          {exams.map((e) => (
+            <option key={e} value={e}>
+              {e}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {/* Question Card */}
       <QuestionCard
-        question={questions[currentQuestion]}
+        question={filteredQuestions[currentQuestion]}
         selectedAnswer={answers[currentQuestion]}
         onAnswer={handleAnswer}
         isSubmitted={isSubmitted}
@@ -103,7 +157,7 @@ export default function PracticeTestPage() {
         </button>
 
         <div className="flex items-center space-x-2">
-          {questions.map((_, index) => (
+          {filteredQuestions.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentQuestion(index)}
@@ -120,7 +174,7 @@ export default function PracticeTestPage() {
           ))}
         </div>
 
-        {currentQuestion === questions.length - 1 ? (
+        {currentQuestion === filteredQuestions.length - 1 ? (
           <button
             onClick={handleSubmit}
             disabled={isSubmitted}
@@ -148,7 +202,7 @@ export default function PracticeTestPage() {
             {calculateScore()}%
           </div>
           <div className="space-y-4">
-            {questions.map((question, index) => (
+            {filteredQuestions.map((question, index) => (
               <div key={question.id} className="p-4 rounded-lg bg-gray-50">
                 <div className="font-medium text-gray-900">Question {index + 1}</div>
                 <div className="mt-1 text-sm text-gray-600">

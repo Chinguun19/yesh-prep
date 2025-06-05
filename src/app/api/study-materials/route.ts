@@ -10,6 +10,7 @@ const materials = [
     duration: '2 hours',
     lessons: 12,
     image: 'https://wallpaperaccess.com/full/2870989.jpg',
+    exam: 'Entrance Exam',
   },
   {
     id: 2,
@@ -20,6 +21,7 @@ const materials = [
     duration: '3 hours',
     lessons: 15,
     image: 'https://wallpaperaccess.com/full/2870989.jpg',
+    exam: 'Mock Exam 1',
   },
 ]
 

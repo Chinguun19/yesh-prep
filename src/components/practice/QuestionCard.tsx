@@ -5,6 +5,7 @@ interface Question {
   correctAnswer: string
   explanation: string
   subject: string
+  exam: string
 }
 
 interface QuestionCardProps {
@@ -24,6 +25,7 @@ const QuestionCard = ({
     <div className="bg-white rounded-lg shadow-sm p-6">
       <div className="flex items-center justify-between mb-4">
         <span className="text-sm font-medium text-gray-600">{question.subject}</span>
+        <span className="text-xs text-gray-400">{question.exam}</span>
       </div>
       <h2 className="text-lg font-medium text-gray-900 mb-6">{question.question}</h2>
       <div className="space-y-3">
